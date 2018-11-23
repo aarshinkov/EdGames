@@ -1,11 +1,16 @@
 package obj;
 
+import java.util.HashMap;
+
 public class DOB {
     private AuxDate auxDate;
 
     private int DAY;
     private int MONTH;
     private int YEAR;
+
+    private HashMap<Integer, Integer> monthsHashMap = new HashMap<Integer, Integer>();
+    private HashMap<Integer, String> daysOfWeekHashMap = new HashMap<Integer, String>();
 
     /**
      * Creates and DOB (date of birth) instance by getting the
@@ -40,6 +45,8 @@ public class DOB {
 
         auxDate = new AuxDate();
 
+        auxDate = populateSubYears(dateArray[2], auxDate);
+
         try {
             auxDate.setDay(Integer.parseInt(dateArray[0]));
             auxDate.setMonth(Integer.parseInt(dateArray[1]));
@@ -48,6 +55,15 @@ public class DOB {
 //            throw new NumberFormatException("Some of the provided data is invalid. Make sure your values for date, month and year in required range.");
         }
     }
+
+    private AuxDate populateSubYears(String year, AuxDate auxDate) {
+
+        auxDate.setSubYearOne(Integer.parseInt(year.substring(0, 2)));
+        auxDate.setSubYearTwo(Integer.parseInt(year.substring(2, 4)));
+
+        return auxDate;
+    }
+
 
     public boolean isDateValid() {
         if (auxDate.getMonth() < 1 || auxDate.getMonth() > 12) {
@@ -90,6 +106,50 @@ public class DOB {
 
     public boolean isLeapYear() {
         return ((auxDate.getYear() % 4 == 0) && (auxDate.getYear() % 100 != 0)) || (auxDate.getYear() % 400 == 0);
+    }
+
+    public int roundLower() {
+        return Math.round(YEAR / 10) * 10;
+    }
+
+    public String findDayOfBirth() {
+        monthsHashMap = populateMonthsHashMap(monthsHashMap);
+        daysOfWeekHashMap = populateDaysOfWeekHashMap(daysOfWeekHashMap);
+
+        int div = auxDate.getSubYearTwo() / 4;
+        int step3 = auxDate.getSubYearTwo() + div;
+        int step4 = step3 + DAY;
+        int step5 = step4 + monthsHashMap.get(MONTH);
+        int step6 = step5 % 7;
+
+        return daysOfWeekHashMap.get(step6);
+    }
+
+    private HashMap<Integer, Integer> populateMonthsHashMap(HashMap<Integer, Integer> monthsHashMap) {
+        monthsHashMap.put(1, 0);
+        monthsHashMap.put(2, 3);
+        monthsHashMap.put(3, 3);
+        monthsHashMap.put(4, 6);
+        monthsHashMap.put(5, 1);
+        monthsHashMap.put(6, 4);
+        monthsHashMap.put(7, 6);
+        monthsHashMap.put(8, 2);
+        monthsHashMap.put(9, 5);
+        monthsHashMap.put(10, 0);
+        monthsHashMap.put(11, 3);
+        monthsHashMap.put(12, 5);
+        return monthsHashMap;
+    }
+
+    private HashMap<Integer, String> populateDaysOfWeekHashMap(HashMap<Integer, String> daysOfWeekHashMap) {
+        daysOfWeekHashMap.put(0, "Sunday");
+        daysOfWeekHashMap.put(1, "Monday");
+        daysOfWeekHashMap.put(2, "Tuesday");
+        daysOfWeekHashMap.put(3, "Wednesday");
+        daysOfWeekHashMap.put(4, "Thursday");
+        daysOfWeekHashMap.put(5, "Friday");
+        daysOfWeekHashMap.put(6, "Saturday");
+        return daysOfWeekHashMap;
     }
 
     public int getDAY() {

@@ -5,6 +5,9 @@ public class AuxDate {
     private int month;
     private int year;
 
+    private int subYearOne;
+    private int subYearTwo;
+
     public AuxDate() {
     }
 
@@ -30,5 +33,21 @@ public class AuxDate {
 
     public void setYear(int year) {
         this.year = year;
+    }
+
+    public int getSubYearOne() {
+        return subYearOne;
+    }
+
+    public void setSubYearOne(int subYearOne) {
+        this.subYearOne = subYearOne;
+    }
+
+    public int getSubYearTwo() {
+        return subYearTwo;
+    }
+
+    public void setSubYearTwo(int subYearTwo) {
+        this.subYearTwo = subYearTwo;
     }
 }
